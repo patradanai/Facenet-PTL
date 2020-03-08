@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from Widget import VideoDisplayWidget
 
 
 class Ui_MainWindow(object):
@@ -18,7 +19,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget = VideoDisplayWidget(
+            "haarcascade_frontalface_default.xml", self.centralwidget)
         self.widget.setObjectName("widget")
         self.verticalLayout.addWidget(self.widget)
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)

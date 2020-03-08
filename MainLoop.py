@@ -18,17 +18,17 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Face_Recognition")
 
-        self.myWidget = VideoDisplayWidget(
-            "haarcascade_frontalface_default.xml")
+        # self.Mywidget = VideoDisplayWidget(
+        #     "haarcascade_frontalface_default.xml")
 
         self.captureThread = QThread()
         self.captureWorker = RecordVideo()
         self.captureWorker.moveToThread(self.captureThread)
-        self.captureWorker.imageData.connect(self.myWidget.image_data_slot)
+        self.captureWorker.imageData.connect(self.ui.widget.image_data_slot)
         self.captureThread.started.connect(self.captureWorker.startRecord)
         self.captureThread.start()
 
-        self.ui.verticalLayout.addWidget(self.myWidget)
+        # self.ui.verticalLayout.addWidget(self.widget)
 
 
 if __name__ == "__main__":
