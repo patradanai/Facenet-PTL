@@ -16,6 +16,7 @@ class VideoDisplayWidget (QWidget):
         self._width = 2
         self._min_size = (30, 30)
 
+    @pyqtSlot(np.ndarray)
     def detect_faces(self, image: np.ndarray):
         # haarclassifiers work better in black and white
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -29,6 +30,7 @@ class VideoDisplayWidget (QWidget):
 
         return faces
 
+    @pyqtSlot(np.ndarray)
     def image_data_slot(self, image_data):
         faces = self.detect_faces(image_data)
         for (x, y, w, h) in faces:
@@ -43,6 +45,7 @@ class VideoDisplayWidget (QWidget):
 
         self.update()
 
+    @pyqtSlot(np.ndarray)
     def get_qimage(self, image: np.ndarray):
         height, width, colors = image.shape
         bytesPerLine = 3 * width
