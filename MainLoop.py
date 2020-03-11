@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,6 +12,10 @@ from captureThreading import *
 
 
 class MainWindow(QMainWindow):
+
+    # directory of folder
+    dir = os.path.dirname(os.path.realpath(__file__))
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
@@ -33,7 +38,8 @@ class MainWindow(QMainWindow):
         listWidgetCustom = QCustomQWidget()
         listWidgetCustom.setTextUp("TEST")
         listWidgetCustom.setTextDown("Hello")
-        # listWidgetCustom.setIcon('MyIcon.png')
+        print(self.dir)
+        listWidgetCustom.setIcon(self.dir + '\MyIcon.png')
         myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
         myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
         self.ui.listWidget.addItem(myQListWidgetItem)
@@ -68,7 +74,8 @@ class QCustomQWidget (QWidget):
         self.textDownQLabel.setText(text)
 
     def setIcon(self, imagePath):
-        self.iconQLabel.setPixmap(QPixmap(imagePath))
+        self.iconQLabel.setPixmap(QPixmap(imagePath).scaled(
+            48, 48))
 
 
 if __name__ == "__main__":
