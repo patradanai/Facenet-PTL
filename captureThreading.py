@@ -14,6 +14,6 @@ class RecordVideo(QObject):
     def startRecord(self):
         while True:
             ret, frame = self.capture.read()
-
+            frame = cv2.resize(frame, (478, 350), fx=0.5, fy=0.5)
             if ret:
                 self.imageData.emit(frame)

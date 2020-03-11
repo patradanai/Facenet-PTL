@@ -30,6 +30,46 @@ class MainWindow(QMainWindow):
 
         # self.ui.verticalLayout.addWidget(self.widget)
 
+        listWidgetCustom = QCustomQWidget()
+        listWidgetCustom.setTextUp("TEST")
+        listWidgetCustom.setTextDown("Hello")
+        # listWidgetCustom.setIcon('MyIcon.png')
+        myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
+        myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
+        self.ui.listWidget.addItem(myQListWidgetItem)
+        self.ui.listWidget.setItemWidget(myQListWidgetItem, listWidgetCustom)
+
+
+class QCustomQWidget (QWidget):
+    def __init__(self, parent=None):
+        super(QCustomQWidget, self).__init__(parent)
+        self.textQVBoxLayout = QVBoxLayout()
+        self.textUpQLabel = QLabel()
+        self.textDownQLabel = QLabel()
+        self.textQVBoxLayout.addWidget(self.textUpQLabel)
+        self.textQVBoxLayout.addWidget(self.textDownQLabel)
+        self.allQHBoxLayout = QHBoxLayout()
+        self.iconQLabel = QLabel()
+        self.allQHBoxLayout.addWidget(self.iconQLabel, 0)
+        self.allQHBoxLayout.addLayout(self.textQVBoxLayout, 1)
+        self.setLayout(self.allQHBoxLayout)
+        # setStyleSheet
+        self.textUpQLabel.setStyleSheet('''
+            color: rgb(0, 0, 255);
+        ''')
+        self.textDownQLabel.setStyleSheet('''
+            color: rgb(255, 0, 0);
+        ''')
+
+    def setTextUp(self, text):
+        self.textUpQLabel.setText(text)
+
+    def setTextDown(self, text):
+        self.textDownQLabel.setText(text)
+
+    def setIcon(self, imagePath):
+        self.iconQLabel.setPixmap(QPixmap(imagePath))
+
 
 if __name__ == "__main__":
     # Create the Qt Application
