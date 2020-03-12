@@ -1,4 +1,5 @@
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 import cv2
 import numpy as np
 import align.detect_face
@@ -14,22 +15,25 @@ class RecordVideo(QObject):
     # Signal * Slot
     imageData = pyqtSignal(np.ndarray)
 
+    imageList = pyqtSignal(list)
     # Model
     modeldir = './model/20180402-114759.pb'
     classifier_filename = './class/classifier.pkl'
     npy = './align'
     train_img = "./imageTrain"
 
+    # Store Image Current
+    imgStore = []
+
     def __init__(self, parent=None):
         super(RecordVideo, self).__init__(parent)
-        self.capture = cv2.VideoCapture(0)
 
     def startRecord(self):
+        print('Creating networks and loading parameters')
         gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6)
         sess = tf.Session(config=tf.ConfigProto(
             gpu_options=gpu_options, log_device_placement=False))
         with sess.as_default():
-            cap = cv2.VideoCapture(1)
             pnet, rnet, onet = align.detect_face.create_mtcnn(sess, self.npy)
 
             minsize = 20  # minimum size of face
@@ -56,18 +60,21 @@ class RecordVideo(QObject):
             with open(classifier_filename_exp, 'rb') as infile:
                 (model, class_names) = pickle.load(infile)
 
-            video_capture = cv2.VideoCapture(1)
+            video_capture = cv2.VideoCapture(0)
             c = 0
 
             print('Start Recognition')
             prevTime = 0
             while True:
-                ret, frame = self.capture.read()
+                ret, frame = video_capture.read()
+                QApplication.processEvents()
                 frame = cv2.resize(frame, (478, 350), fx=0.5, fy=0.5)
 
                 bounding_boxes, points = align.detect_face.detect_face(
                     frame, minsize, pnet, rnet, onet, threshold, factor)
-                fps = cap.get(cv2.CAP_PROP_FPS)
+                fps = video_capture.get(cv2.CAP_PROP_FPS)
+
+                print("FPS : {}" .format(fps))
                 curTime = time.time()+1    # calc fps
                 timeF = frame_interval
 
@@ -92,6 +99,8 @@ class RecordVideo(QObject):
                         bb = np.zeros((nrof_faces, 4), dtype=np.int32)
 
                         for i in range(nrof_faces):
+
+                            # Check Face not over
                             if i > len(cropped):
                                 break
                             emb_array = np.zeros((1, embedding_size))
@@ -130,10 +139,7 @@ class RecordVideo(QObject):
                             print(best_class_indices, ' with accuracy ',
                                   best_class_probabilities)
 
-                            # fps = video_capture.get(cv2.CAP_PROP_FPS)
-                            # cv2.putText(frame, "FPS : {}".format(fps), (50, 50),
-                            #             cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), False)
-                            # print(best_class_probabilities)
+                            # Probalility over 80 percent
                             if best_class_probabilities > 0.8:
                                 # boxing face
                                 cv2.rectangle(
@@ -156,6 +162,14 @@ class RecordVideo(QObject):
                                                                                        ], best_class_probabilities[0]*100)
                                         cv2.putText(frame, result_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                                     1, (0, 0, 255), thickness=1, lineType=2)
+
+                                    # Store Name
+                                    if not HumanNames[best_class_indices[0]] in self.imgStore:
+                                        self.imgStore.append(
+                                            HumanNames[best_class_indices[0]])
+
+                                        # Emit List Name
+                                        self.imageList.emit(self.imgStore)
                             else:
                                 # boxing face
                                 cv2.rectangle(
@@ -168,3 +182,4 @@ class RecordVideo(QObject):
                         print('Alignment Failure')
                 # Emit Image to pyQt5
                 self.imageData.emit(frame)
+            video_capture.release()

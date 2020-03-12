@@ -16,29 +16,42 @@ class MainWindow(QMainWindow):
     # directory of folder
     dir = os.path.dirname(os.path.realpath(__file__))
 
+    listName = []
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.setWindowTitle("Face_Recognition")
-        self.ui.label.setText("Face Recognition")
+        self.ui.label.setText("Face Recognition Check Name")
 
         self.captureThread = QThread()
         self.captureWorker = RecordVideo()
         self.captureWorker.moveToThread(self.captureThread)
         self.captureWorker.imageData.connect(self.ui.widget.image_data_slot)
+        self.captureWorker.imageList.connect(self.handleList)
         self.captureThread.started.connect(self.captureWorker.startRecord)
         self.captureThread.start()
 
-        listWidgetCustom = QCustomQWidget()
-        listWidgetCustom.setTextUp("TEST")
-        listWidgetCustom.setTextDown("Hello")
-        listWidgetCustom.setIcon(self.dir + '\MyIcon.png')
-        myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
-        myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
-        self.ui.listWidget.addItem(myQListWidgetItem)
-        self.ui.listWidget.setItemWidget(myQListWidgetItem, listWidgetCustom)
+    def handleList(self, list):
+        self.listName = list
+        print("Name:", self.listName)
+
+        # Render image in Qlistwidget
+
+        if len(self.listName) > 0:
+            for i in self.listName:
+                listWidgetCustom = QCustomQWidget()
+                listWidgetCustom.setTextUp("PATRADANAI NAKPIMAY")
+                listWidgetCustom.setTextDown("Date : ")
+                listWidgetCustom.setIcon(
+                    self.dir + "/imageShow/" + i + ".jpg")
+                myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
+                myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
+                self.ui.listWidget.addItem(myQListWidgetItem)
+                self.ui.listWidget.setItemWidget(
+                    myQListWidgetItem, listWidgetCustom)
 
 
 class QCustomQWidget (QWidget):
