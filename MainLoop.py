@@ -36,7 +36,6 @@ class MainWindow(QMainWindow):
 
     def handleList(self, list):
         self.listName = list
-        print("Name:", self.listName)
 
         # Render image in Qlistwidget
 

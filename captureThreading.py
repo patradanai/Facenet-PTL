@@ -9,6 +9,7 @@ import time
 import pickle
 import facenet
 from PIL import Image
+from imutils.video import FPS
 
 
 class RecordVideo(QObject):
@@ -63,18 +64,24 @@ class RecordVideo(QObject):
             video_capture = cv2.VideoCapture(0)
             c = 0
 
+            # FPS
+            fps = FPS().start()
             print('Start Recognition')
             prevTime = 0
             while True:
+                # Real Video
                 ret, frame = video_capture.read()
                 QApplication.processEvents()
+
+                # Resize
                 frame = cv2.resize(frame, (478, 350), fx=0.5, fy=0.5)
 
+                # Return Boxpoint and Keypoint
                 bounding_boxes, points = align.detect_face.detect_face(
                     frame, minsize, pnet, rnet, onet, threshold, factor)
-                fps = video_capture.get(cv2.CAP_PROP_FPS)
+                # fps = video_capture.get(cv2.CAP_PROP_FPS)
 
-                print("FPS : {}" .format(fps))
+                # print("FPS : {}" .format(fps))
                 curTime = time.time()+1    # calc fps
                 timeF = frame_interval
 
@@ -87,7 +94,7 @@ class RecordVideo(QObject):
                     bounding_boxes, points = align.detect_face.detect_face(
                         frame, minsize, pnet, rnet, onet, threshold, factor)
                     nrof_faces = bounding_boxes.shape[0]
-                    print('Detected_FaceNum: %d' % nrof_faces)
+                    # print('Detected_FaceNum: %d' % nrof_faces)
 
                     if nrof_faces > 0:
                         det = bounding_boxes[:, 0:4]
@@ -118,7 +125,7 @@ class RecordVideo(QObject):
                             cropped.append(
                                 frame[bb[i][1]:bb[i][3], bb[i][0]:bb[i][2], :])
                             cropped[i] = facenet.flip(cropped[i], False)
-                            # scaled.append(misc.imresize(cropped[i], (image_size, image_size), interp='bilinear'))
+                            # Update PTL IMAGE
                             scaled.append(np.array(Image.fromarray(cropped[i]).resize(
                                 (image_size, image_size), Image.BILINEAR)))
                             scaled[i] = cv2.resize(scaled[i], (input_image_size, input_image_size),
@@ -131,13 +138,13 @@ class RecordVideo(QObject):
                             emb_array[0, :] = sess.run(
                                 embeddings, feed_dict=feed_dict)
                             predictions = model.predict_proba(emb_array)
-                            print(predictions)
+                            # print(predictions)
                             best_class_indices = np.argmax(predictions, axis=1)
                             best_class_probabilities = predictions[np.arange(
                                 len(best_class_indices)), best_class_indices]
                             # print("predictions")
-                            print(best_class_indices, ' with accuracy ',
-                                  best_class_probabilities)
+                            # print(best_class_indices, ' with accuracy ',
+                            #       best_class_probabilities)
 
                             # Probalility over 80 percent
                             if best_class_probabilities > 0.8:
@@ -153,8 +160,8 @@ class RecordVideo(QObject):
                                 # plot result idx under box
                                 text_x = bb[i][0]
                                 text_y = bb[i][3] + 20
-                                print('Result Indices: ',
-                                      best_class_indices[0])
+                                # print('Result Indices: ',
+                                #       best_class_indices[0])
                                 print(HumanNames)
                                 for H_i in HumanNames:
                                     if HumanNames[best_class_indices[0]] == H_i:
@@ -180,6 +187,11 @@ class RecordVideo(QObject):
                                             1, (0, 0, 255), thickness=1, lineType=2)
                     else:
                         print('Alignment Failure')
+                # Update FPS
+                fps.update()
                 # Emit Image to pyQt5
                 self.imageData.emit(frame)
+
+            # Clean up
+            cv2.destroyAllWindows()
             video_capture.release()
