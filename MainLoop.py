@@ -22,9 +22,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.setWindowTitle("Face_Recognition")
-
-        # self.Mywidget = VideoDisplayWidget(
-        #     "haarcascade_frontalface_default.xml")
+        self.ui.label.setText("Face Recognition")
 
         self.captureThread = QThread()
         self.captureWorker = RecordVideo()
@@ -33,12 +31,9 @@ class MainWindow(QMainWindow):
         self.captureThread.started.connect(self.captureWorker.startRecord)
         self.captureThread.start()
 
-        # self.ui.verticalLayout.addWidget(self.widget)
-
         listWidgetCustom = QCustomQWidget()
         listWidgetCustom.setTextUp("TEST")
         listWidgetCustom.setTextDown("Hello")
-        print(self.dir)
         listWidgetCustom.setIcon(self.dir + '\MyIcon.png')
         myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
         myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())

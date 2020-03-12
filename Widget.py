@@ -32,13 +32,6 @@ class VideoDisplayWidget (QWidget):
 
     @pyqtSlot(np.ndarray)
     def image_data_slot(self, image_data):
-        faces = self.detect_faces(image_data)
-        for (x, y, w, h) in faces:
-            cv2.rectangle(image_data,
-                          (x, y),
-                          (x+w, y+h),
-                          self._red,
-                          self._width)
         self.image = self.get_qimage(image_data)
         if self.image.size() != self.size():
             self.setFixedSize(self.image.size())
