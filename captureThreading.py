@@ -31,8 +31,9 @@ class RecordVideo(QObject):
 
     def startRecord(self):
         print('Creating networks and loading parameters')
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6)
-        sess = tf.Session(config=tf.ConfigProto(
+        gpu_options = tf.compat.v1.GPUOptions(
+            per_process_gpu_memory_fraction=0.6)
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(
             gpu_options=gpu_options, log_device_placement=False))
         with sess.as_default():
             pnet, rnet, onet = align.detect_face.create_mtcnn(sess, self.npy)
@@ -51,9 +52,10 @@ class RecordVideo(QObject):
 
             print('Loading Modal')
             facenet.load_model(self.modeldir)
-            images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
-            embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")
-            phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
+            images_placeholder = tf.compat.v1.get_default_graph().get_tensor_by_name("input:0")
+            embeddings = tf.compat.v1.get_default_graph().get_tensor_by_name("embeddings:0")
+            phase_train_placeholder = tf.compat.v1.get_default_graph(
+            ).get_tensor_by_name("phase_train:0")
             embedding_size = embeddings.get_shape()[1]
 
             classifier_filename_exp = os.path.expanduser(
