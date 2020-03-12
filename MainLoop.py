@@ -9,6 +9,7 @@ import numpy as np
 from ui_DialogMainLoop import Ui_MainWindow
 from Widget import *
 from captureThreading import *
+import qdarkstyle
 
 
 class MainWindow(QMainWindow):
@@ -88,6 +89,8 @@ class QCustomQWidget (QWidget):
 if __name__ == "__main__":
     # Create the Qt Application
     app = QApplication(sys.argv)
+    # setup stylesheet
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     # Create and show the form
     main = MainWindow()
     main.show()

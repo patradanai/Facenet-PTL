@@ -31,8 +31,9 @@ class RecordVideo(QObject):
 
     def startRecord(self):
         print('Creating networks and loading parameters')
+        print(tf.test.is_gpu_available())
         gpu_options = tf.compat.v1.GPUOptions(
-            per_process_gpu_memory_fraction=0.6)
+            per_process_gpu_memory_fraction=1)
         sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(
             gpu_options=gpu_options, log_device_placement=False))
         with sess.as_default():
