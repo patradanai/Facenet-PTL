@@ -45,6 +45,8 @@ class RegisterThreading(QObject):
                 while True:
                     ret, frame = cap.read()
 
+                    frame = cv2.resize(frame, (460, 350), fx=0.5, fy=0.5)
+
                     bounding_boxes, points = align.detect_face.detect_face(
                         frame, minsize, pnet, rnet, onet, threshold, factor)
                     fps = cap.get(cv2.CAP_PROP_FPS)

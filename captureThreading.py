@@ -77,7 +77,7 @@ class RecordVideo(QObject):
                 QApplication.processEvents()
 
                 # Resize
-                frame = cv2.resize(frame, (478, 350), fx=0.5, fy=0.5)
+                frame = cv2.resize(frame, (460, 350), fx=0.5, fy=0.5)
 
                 # Return Boxpoint and Keypoint
                 bounding_boxes, points = align.detect_face.detect_face(

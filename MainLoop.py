@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.captureWorker.imageData.connect(self.ui.widget.image_data_slot)
         self.captureWorker.imageList.connect(self.handleList)
         self.captureThread.started.connect(self.captureWorker.startRecord)
-        # self.captureThread.start()
+        self.captureThread.start()
 
         # Face Registor
         self.registerThread = QThread()
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         self.registerWorking.imagePayload.connect(
             self.ui.widget_2.image_data_slot)
         self.registerThread.started.connect(self.registerWorking.startRegistor)
-        self.registerThread.start()
+        # self.registerThread.start()
 
         # Stack Widget
 
