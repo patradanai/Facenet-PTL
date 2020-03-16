@@ -7,8 +7,8 @@ from ui_Widget import Ui_Form
 import cv2
 import numpy as np
 from ui_DialogMainLoop import Ui_MainWindow
-from Widget import *
 from captureThreading import *
+from registerThreading import *
 import qdarkstyle
 
 
@@ -27,13 +27,41 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Face_Recognition")
         self.ui.label.setText("Face Recognition Check Name")
 
+        # Init Set Text
+        self.ui.pushButton.setText('Face Recognition')
+        self.ui.pushButton_2.setText('Registor Face')
+        self.ui.pushButton_3.setText('Exit')
+
+        # Init Stack Widget
+        self.ui.stackedWidget.setCurrentIndex(2)
+
+        # Init Threading
+
+        # Face Recognition
         self.captureThread = QThread()
         self.captureWorker = RecordVideo()
         self.captureWorker.moveToThread(self.captureThread)
         self.captureWorker.imageData.connect(self.ui.widget.image_data_slot)
         self.captureWorker.imageList.connect(self.handleList)
         self.captureThread.started.connect(self.captureWorker.startRecord)
-        self.captureThread.start()
+        # self.captureThread.start()
+
+        # Face Registor
+        self.registerThread = QThread()
+        self.registerWorking = RegisterThreading()
+        self.registerWorking.moveToThread(self.registerThread)
+        self.registerWorking.imagePayload.connect(
+            self.ui.widget_2.image_data_slot)
+        self.registerThread.started.connect(self.registerWorking.startRegistor)
+        self.registerThread.start()
+
+        # Stack Widget
+
+        self.ui.pushButton.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentIndex(0))
+        self.ui.pushButton_2.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentIndex(1))
+        self.ui.pushButton_3.clicked.connect(sys.exit)
 
     def handleList(self, list):
         self.listName = list
