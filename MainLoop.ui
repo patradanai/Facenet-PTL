@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -70,7 +70,7 @@
                 </font>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: rgb(231, 255, 143);</string>
+                <string notr="true">background-color: rgb(255, 255, 255)</string>
                </property>
                <property name="text">
                 <string>Face Recognition</string>
@@ -271,7 +271,7 @@
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 127);</string>
+           <string notr="true">background-color:rgb(255, 255, 255)</string>
           </property>
           <property name="text">
            <string>Pre-Training Image</string>
@@ -710,20 +710,20 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
              <item>
               <widget class="QPushButton" name="pushButton_3">
                <property name="sizePolicy">

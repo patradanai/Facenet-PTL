@@ -9,13 +9,12 @@ import time
 import pickle
 import facenet
 from PIL import Image
-from imutils.video import FPS
 
 
 class RecordVideo(QObject):
     # Signal * Slot
     imageData = pyqtSignal(np.ndarray)
-
+    finished = pyqtSignal()
     imageList = pyqtSignal(list)
     # Model
     modeldir = './model/20180402-114759.pb'
@@ -26,8 +25,13 @@ class RecordVideo(QObject):
     # Store Image Current
     imgStore = []
 
+    # Variable
+    finishFlag = False
+
     def __init__(self, parent=None):
         super(RecordVideo, self).__init__(parent)
+
+        self.finished.connect(self.finishedFunc)
 
     def startRecord(self):
         print('Creating networks and loading parameters')
@@ -67,8 +71,6 @@ class RecordVideo(QObject):
             video_capture = cv2.VideoCapture(0)
             c = 0
 
-            # FPS
-            fps = FPS().start()
             print('Start Recognition')
             prevTime = 0
             while True:
@@ -190,11 +192,15 @@ class RecordVideo(QObject):
                                             1, (0, 0, 255), thickness=1, lineType=2)
                     else:
                         print('Alignment Failure')
-                # Update FPS
-                fps.update()
+                if self.finishFlag:
+                    break
+
                 # Emit Image to pyQt5
                 self.imageData.emit(frame)
 
             # Clean up
             cv2.destroyAllWindows()
             video_capture.release()
+
+    def finishedFunc(self):
+        self.finishFlag = True

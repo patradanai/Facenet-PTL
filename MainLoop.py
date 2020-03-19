@@ -17,7 +17,12 @@ class MainWindow(QMainWindow):
     # directory of folder
     dir = os.path.dirname(os.path.realpath(__file__))
 
+    # Variable
+
     listName = []
+    listFolder = []
+
+    nameFolder = ""
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -32,6 +37,10 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_2.setText('Registor Face')
         self.ui.pushButton_3.setText('Exit')
 
+        # Init Button Disable
+        self.ui.pushButton_5.setEnabled(False)
+        self.ui.pushButton_6.setEnabled(False)
+
         # Init Stack Widget
         self.ui.stackedWidget.setCurrentIndex(2)
 
@@ -44,7 +53,6 @@ class MainWindow(QMainWindow):
         self.captureWorker.imageData.connect(self.ui.widget.image_data_slot)
         self.captureWorker.imageList.connect(self.handleList)
         self.captureThread.started.connect(self.captureWorker.startRecord)
-        self.captureThread.start()
 
         # Face Registor
         self.registerThread = QThread()
@@ -57,11 +65,32 @@ class MainWindow(QMainWindow):
 
         # Stack Widget
 
+        # ------------------ MainPage ---------------------
         self.ui.pushButton.clicked.connect(
-            lambda: self.ui.stackedWidget.setCurrentIndex(0))
+            lambda: self.ui.stackedWidget.setCurrentIndex(0))   # Go to Face recognition
         self.ui.pushButton_2.clicked.connect(
-            lambda: self.ui.stackedWidget.setCurrentIndex(1))
-        self.ui.pushButton_3.clicked.connect(sys.exit)
+            self.goToPreImage)   # Go to Pre-image
+        self.ui.pushButton_3.clicked.connect(sys.exit)          # Exit
+
+        # ------------------ Pre-Training -----------------
+        self.ui.pushButton_10.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentIndex(2))   # Back to MainPage
+        self.ui.pushButton_4.clicked.connect(self.createName)   # Add Folder
+        self.ui.pushButton_5.clicked.connect(
+            lambda: self.registerWorking.startRecord.emit(self.nameFolder))   # Start Record
+
+        # ------------------ Face-Recognition -------------
+        self.ui.pushButton_7.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentIndex(2))   # Back to MainPage
+        self.ui.pushButton_9.clicked.connect(
+            self.captureThread.start)  # Start Face
+        self.ui.pushButton_8.clicked.connect(
+            self.captureThread.finished)  # Stop Face
+
+        # ListName in Folder
+        print(os.listdir(self.dir + "/imageTest/"))
+
+        self.handlelistFolder(os.listdir(self.dir + "/imageTest/"))
 
     def handleList(self, list):
         self.listName = list
@@ -81,6 +110,46 @@ class MainWindow(QMainWindow):
                 self.ui.listWidget.setItemWidget(
                     myQListWidgetItem, listWidgetCustom)
 
+    def handlelistFolder(self, list):
+        self.listFolder = list
+
+        # Render image in Qlistwidget
+
+        if len(self.listFolder) > 0:
+            for i in self.listFolder:
+                listWidgetCustom = QListQWidget()
+                listWidgetCustom.setTextUp(i)
+                listWidgetCustom.setTextDown("Date : ")
+                listWidgetCustom.setIcon(
+                    self.dir + "/imageShow/" + i + ".jpg")
+                myQListWidgetItem = QListWidgetItem(self.ui.listWidget_2)
+                myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
+                self.ui.listWidget_2.addItem(myQListWidgetItem)
+                self.ui.listWidget_2.setItemWidget(
+                    myQListWidgetItem, listWidgetCustom)
+
+    # ------------ Function for Pre-Training --------------
+    def createFolder(self):
+        if not os.path.exists(self.dir + "/imageTest/" + "%s" % self.nameFolder):
+            os.makedirs(self.dir + "/imageTest/" + "%s" % self.nameFolder)
+
+    def createName(self):
+        self.nameFolder = ""
+        text, okPressed = QInputDialog.getText(
+            self, "Get text", "Your name:", QLineEdit.Normal, "")
+        if okPressed and text != '':
+            self.nameFolder = text
+            self.createFolder()
+            # Boolean Button
+            self.ui.pushButton_4.setEnabled(False)
+            self.ui.pushButton_5.setEnabled(True)
+
+    def goToPreImage(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+        self.registerThread.start()
+
+# Widgetlist Name
+
 
 class QCustomQWidget (QWidget):
     def __init__(self, parent=None):
@@ -90,6 +159,40 @@ class QCustomQWidget (QWidget):
         self.textDownQLabel = QLabel()
         self.textQVBoxLayout.addWidget(self.textUpQLabel)
         self.textQVBoxLayout.addWidget(self.textDownQLabel)
+        self.allQHBoxLayout = QHBoxLayout()
+        self.iconQLabel = QLabel()
+        self.allQHBoxLayout.addWidget(self.iconQLabel, 0)
+        self.allQHBoxLayout.addLayout(self.textQVBoxLayout, 1)
+        self.setLayout(self.allQHBoxLayout)
+        # setStyleSheet
+        self.textUpQLabel.setStyleSheet('''
+            color: rgb(0, 0, 255);
+        ''')
+        self.textDownQLabel.setStyleSheet('''
+            color: rgb(255, 0, 0);
+        ''')
+
+    def setTextUp(self, text):
+        self.textUpQLabel.setText(text)
+
+    def setTextDown(self, text):
+        self.textDownQLabel.setText(text)
+
+    def setIcon(self, imagePath):
+        self.iconQLabel.setPixmap(QPixmap(imagePath).scaled(
+            48, 48))
+
+# Widgetlist Folder
+
+
+class QListQWidget (QWidget):
+    def __init__(self, parent=None):
+        super(QListQWidget, self).__init__(parent)
+        self.textQVBoxLayout = QVBoxLayout()
+        self.textUpQLabel = QLabel()
+        self.textDownQLabel = QLabel()
+        self.textQVBoxLayout.addWidget(self.textUpQLabel)
+
         self.allQHBoxLayout = QHBoxLayout()
         self.iconQLabel = QLabel()
         self.allQHBoxLayout.addWidget(self.iconQLabel, 0)

@@ -8,27 +8,12 @@ import numpy as np
 
 
 class VideoDisplayWidget (QWidget):
-    def __init__(self, haar_cascade_filepath, parent=None):
+    def __init__(self, parent=None):
         super(VideoDisplayWidget, self).__init__(parent)
-        self.classifier = cv2.CascadeClassifier(haar_cascade_filepath)
         self.image = QImage()
         self._red = (0, 0, 255)
         self._width = 2
         self._min_size = (30, 30)
-
-    @pyqtSlot(np.ndarray)
-    def detect_faces(self, image: np.ndarray):
-        # haarclassifiers work better in black and white
-        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        gray_image = cv2.equalizeHist(gray_image)
-
-        faces = self.classifier.detectMultiScale(gray_image,
-                                                 scaleFactor=1.3,
-                                                 minNeighbors=4,
-                                                 flags=cv2.CASCADE_SCALE_IMAGE,
-                                                 minSize=self._min_size)
-
-        return faces
 
     @pyqtSlot(np.ndarray)
     def image_data_slot(self, image_data):
