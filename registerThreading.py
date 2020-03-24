@@ -5,6 +5,7 @@ import align.detect_face
 import tensorflow as tf
 import numpy as np
 import os
+import time
 
 
 class RegisterThreading(QObject):
@@ -54,49 +55,53 @@ class RegisterThreading(QObject):
                 cap = cv2.VideoCapture(0)
                 print('Start Recognition')
                 pnet, rnet, onet = align.detect_face.create_mtcnn(sess, npy)
-                while True:
-                    ret, frame = cap.read()
+                if not self.finishFlag:
+                    while True:
+                        ret, frame = cap.read()
 
-                    frame = cv2.resize(frame, (460, 350), fx=0.5, fy=0.5)
+                        frame = cv2.resize(frame, (460, 350), fx=0.5, fy=0.5)
 
-                    bounding_boxes, points = align.detect_face.detect_face(
-                        frame, minsize, pnet, rnet, onet, threshold, factor)
-                    fps = cap.get(cv2.CAP_PROP_FPS)
+                        bounding_boxes, points = align.detect_face.detect_face(
+                            frame, minsize, pnet, rnet, onet, threshold, factor)
+                        fps = cap.get(cv2.CAP_PROP_FPS)
 
-                    if ret:
+                        if ret:
 
-                        for i in range(len(bounding_boxes)):
-                            # Record image
-                            if self.recordFlag and self.nameRegistor != "" and self.countImage <= 30:
-                                cv2.imwrite(
-                                    self.dir+"/imageTest/{}/{}.jpg".format
-                                    (self.nameRegistor, int(self.countImage)), frame)
-                                self.countImage += 1
+                            for i in range(len(bounding_boxes)):
+                                # Record image
+                                if self.recordFlag and self.nameRegistor != "" and self.countImage <= 30:
+                                    cv2.imwrite(
+                                        self.dir+"/imageTest/{}/{}.jpg".format
+                                        (self.nameRegistor, int(self.countImage)), frame)
+                                    self.countImage += 1
 
-                            # Draw Rectangle
-                            cv2.rectangle(frame, (int(bounding_boxes[i][0]), int(bounding_boxes[i][1])), (
-                                int(bounding_boxes[i][2]), int(bounding_boxes[i][3])), (0, 255, 0), 2)
+                                    time.sleep(0.1)
 
-                        # Draw text
-                        cv2.putText(frame, "Count : {}/30".format(self.countImage), (50, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                                    1, (0, 0, 255), thickness=1, lineType=2)
+                                # Draw Rectangle
+                                cv2.rectangle(frame, (int(bounding_boxes[i][0]), int(bounding_boxes[i][1])), (
+                                    int(bounding_boxes[i][2]), int(bounding_boxes[i][3])), (0, 255, 0), 2)
 
-                        # Draw point noise,eye
-                        for p in points.T:
-                            for x in range(5):
-                                cv2.circle(
-                                    frame, (p[x], p[x+5]), 1, (0, 255, 0), 2)
+                            # Draw text
+                            cv2.putText(frame, "Count : {}/30".format(self.countImage), (50, 100), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                                        1, (0, 0, 255), thickness=1, lineType=2)
 
-                    # Emit Data to Widget
-                    self.imagePayload.emit(frame)
+                            # Draw point noise,eye
+                            for p in points.T:
+                                for x in range(5):
+                                    cv2.circle(
+                                        frame, (p[x], p[x+5]), 1, (0, 255, 0), 2)
 
-                    if self.finishFlag:
-                        break
+                        # Emit Data to Widget
+                        self.imagePayload.emit(frame)
+
+                        # if self.finishFlag:
+                        #     break
 
         cap.release()
         cv2.destroyAllWindows()
 
     def finished(self):
+        print("Finshed")
         self.finishFlag = True
 
     def handleRecord(self, name):

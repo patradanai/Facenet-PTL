@@ -10,12 +10,23 @@ from ui_DialogMainLoop import Ui_MainWindow
 from captureThreading import *
 from registerThreading import *
 import qdarkstyle
+from preprocessing import *
+from classifier import *
 
 
 class MainWindow(QMainWindow):
 
     # directory of folder
     dir = os.path.dirname(os.path.realpath(__file__))
+
+    # For Make image Pre-process
+    input_datadir = './imageTest'
+    output_datadir = './imageTrain'
+
+    # For Make Classifire
+    datadir = './imageTrain'
+    modeldir = './model/20180402-114759.pb'
+    classifier_filename = './class/classifier.pkl'
 
     # Variable
 
@@ -39,7 +50,7 @@ class MainWindow(QMainWindow):
 
         # Init Button Disable
         self.ui.pushButton_5.setEnabled(False)
-        self.ui.pushButton_6.setEnabled(False)
+        # self.ui.pushButton_6.setEnabled(False)
 
         # Init Stack Widget
         self.ui.stackedWidget.setCurrentIndex(2)
@@ -92,23 +103,30 @@ class MainWindow(QMainWindow):
 
         self.handlelistFolder(os.listdir(self.dir + "/imageTest/"))
 
+        self.ui.pushButton_6.clicked.connect(self.trainingModel)
+
+        self.ui.pushButton_7.clicked.connect(
+            self.registerWorking.finishThread.emit)
+
     def handleList(self, list):
-        self.listName = list
 
-        # Render image in Qlistwidget
+        if not list in self.listName:
+            self.listName.append(list)
 
-        if len(self.listName) > 0:
-            for i in self.listName:
-                listWidgetCustom = QCustomQWidget()
-                listWidgetCustom.setTextUp("PATRADANAI NAKPIMAY")
-                listWidgetCustom.setTextDown("Date : ")
-                listWidgetCustom.setIcon(
-                    self.dir + "/imageShow/" + i + ".jpg")
-                myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
-                myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
-                self.ui.listWidget.addItem(myQListWidgetItem)
-                self.ui.listWidget.setItemWidget(
-                    myQListWidgetItem, listWidgetCustom)
+            # Render image in Qlistwidget
+
+            if len(self.listName) > 0:
+                for i in self.listName:
+                    listWidgetCustom = QCustomQWidget()
+                    listWidgetCustom.setTextUp("PATRADANAI NAKPIMAY")
+                    listWidgetCustom.setTextDown("Date : ")
+                    listWidgetCustom.setIcon(
+                        self.dir + "/imageShow/" + i + ".jpg")
+                    myQListWidgetItem = QListWidgetItem(self.ui.listWidget)
+                    myQListWidgetItem.setSizeHint(listWidgetCustom.sizeHint())
+                    self.ui.listWidget.addItem(myQListWidgetItem)
+                    self.ui.listWidget.setItemWidget(
+                        myQListWidgetItem, listWidgetCustom)
 
     def handlelistFolder(self, list):
         self.listFolder = list
@@ -136,6 +154,9 @@ class MainWindow(QMainWindow):
     def createName(self):
         self.nameFolder = ""
         text, okPressed = QInputDialog.getText(
+
+
+
             self, "Get text", "Your name:", QLineEdit.Normal, "")
         if okPressed and text != '':
             self.nameFolder = text
@@ -148,6 +169,28 @@ class MainWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.registerThread.start()
 
+    def trainingModel(self):
+        state = 0
+        while True:
+            if state == 0:
+                # Pre-process
+                obj = preprocessing(self.input_datadir, self.output_datadir)
+                nrof_images_total, nrof_successfully_aligned = obj.alignProcessing()
+                print('Total number of images: %d' % nrof_images_total)
+                print('Number of successfully aligned images: %d' %
+                      nrof_successfully_aligned)
+                state += 1
+                # Classifier
+            elif state == 1:
+                print("Training Start")
+                objModel = classifier(mode='TRAIN', datadir=self.datadir, modeldir=self.modeldir,
+                                      classifierFilename=self.classifier_filename)
+                get_file = objModel.main()
+                print('Saved classifier model to file "%s"' % get_file)
+                sys.exit("All Done")
+                state += 1
+            else:
+                break
 # Widgetlist Name
 
 

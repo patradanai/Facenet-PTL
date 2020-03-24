@@ -15,7 +15,7 @@ class RecordVideo(QObject):
     # Signal * Slot
     imageData = pyqtSignal(np.ndarray)
     finished = pyqtSignal()
-    imageList = pyqtSignal(list)
+    imageList = pyqtSignal(str)
     # Model
     modeldir = './model/20180402-114759.pb'
     classifier_filename = './class/classifier.pkl'
@@ -176,12 +176,13 @@ class RecordVideo(QObject):
                                                     1, (0, 0, 255), thickness=1, lineType=2)
 
                                     # Store Name
-                                    if not HumanNames[best_class_indices[0]] in self.imgStore:
-                                        self.imgStore.append(
-                                            HumanNames[best_class_indices[0]])
+                                    # if not HumanNames[best_class_indices[0]] in self.imgStore:
+                                    #     self.imgStore.append(
+                                    #         HumanNames[best_class_indices[0]])
 
-                                        # Emit List Name
-                                        self.imageList.emit(self.imgStore)
+                                    # Emit List Name
+                                    self.imageList.emit(
+                                        HumanNames[best_class_indices[0]])
                             else:
                                 # boxing face
                                 cv2.rectangle(
