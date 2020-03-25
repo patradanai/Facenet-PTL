@@ -12,6 +12,8 @@ from registerThreading import *
 import qdarkstyle
 from preprocessing import *
 from classifier import *
+from WidgetList import *
+from WidgetCustomize import *
 
 
 class MainWindow(QMainWindow):
@@ -35,6 +37,11 @@ class MainWindow(QMainWindow):
 
     nameFolder = ""
 
+    # Flag
+
+    flagPreTraining = True
+    flagFaceDetection = True
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
@@ -47,10 +54,13 @@ class MainWindow(QMainWindow):
         self.ui.pushButton.setText('Face Recognition')
         self.ui.pushButton_2.setText('Registor Face')
         self.ui.pushButton_3.setText('Exit')
+        # for State - Stop of Pre-Training
+        self.ui.pushButton_11.setText('START')
+        self.ui.pushButton_9.setText('START')
 
         # Init Button Disable
         self.ui.pushButton_5.setEnabled(False)
-        # self.ui.pushButton_6.setEnabled(False)
+        self.ui.pushButton_6.setEnabled(False)
 
         # Init Stack Widget
         self.ui.stackedWidget.setCurrentIndex(2)
@@ -72,9 +82,9 @@ class MainWindow(QMainWindow):
         self.registerWorking.imagePayload.connect(
             self.ui.widget_2.image_data_slot)
         self.registerThread.started.connect(self.registerWorking.startRegistor)
-        # self.registerThread.start()
+        self.registerThread.start()
 
-        # Stack Widget
+        # Stack Widgetr
 
         # ------------------ MainPage ---------------------
         self.ui.pushButton.clicked.connect(
@@ -89,14 +99,13 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_4.clicked.connect(self.createName)   # Add Folder
         self.ui.pushButton_5.clicked.connect(
             lambda: self.registerWorking.startRecord.emit(self.nameFolder))   # Start Record
+        self.ui.pushButton_11.clicked.connect(self.openCameraPreTraining)
 
         # ------------------ Face-Recognition -------------
         self.ui.pushButton_7.clicked.connect(
             lambda: self.ui.stackedWidget.setCurrentIndex(2))   # Back to MainPage
         self.ui.pushButton_9.clicked.connect(
-            self.captureThread.start)  # Start Face
-        self.ui.pushButton_8.clicked.connect(
-            self.captureThread.finished)  # Stop Face
+            self.openCameraFaceDetect)  # Start Face
 
         # ListName in Folder
         print(os.listdir(self.dir + "/imageTest/"))
@@ -146,6 +155,20 @@ class MainWindow(QMainWindow):
                 self.ui.listWidget_2.setItemWidget(
                     myQListWidgetItem, listWidgetCustom)
 
+    # ------------ Function for Face Detection ------------
+
+    def openCameraFaceDetect(self):
+        self.flagFaceDetection = not self.flagFaceDetection
+
+        if self.flagFaceDetection == False:
+            self.ui.pushButton_9.setText('STOP')
+            # Set Disable Button Back
+            self.ui.pushButton_10.setEnabled(False)
+        else:
+            self.ui.pushButton_9.setText('START')
+            # Set Disable Button Back
+            self.ui.pushButton_10.setEnabled(True)
+
     # ------------ Function for Pre-Training --------------
     def createFolder(self):
         if not os.path.exists(self.dir + "/imageTest/" + "%s" % self.nameFolder):
@@ -167,9 +190,9 @@ class MainWindow(QMainWindow):
 
     def goToPreImage(self):
         self.ui.stackedWidget.setCurrentIndex(1)
-        self.registerThread.start()
 
     def trainingModel(self):
+        self.registerWorking.finishThread.emit()
         state = 0
         while True:
             if state == 0:
@@ -186,78 +209,24 @@ class MainWindow(QMainWindow):
                 objModel = classifier(mode='TRAIN', datadir=self.datadir, modeldir=self.modeldir,
                                       classifierFilename=self.classifier_filename)
                 get_file = objModel.main()
-                print('Saved classifier model to file "%s"' % get_file)
                 sys.exit("All Done")
                 state += 1
             else:
                 break
-# Widgetlist Name
 
+    def openCameraPreTraining(self):
+        self.flagPreTraining = not self.flagPreTraining
 
-class QCustomQWidget (QWidget):
-    def __init__(self, parent=None):
-        super(QCustomQWidget, self).__init__(parent)
-        self.textQVBoxLayout = QVBoxLayout()
-        self.textUpQLabel = QLabel()
-        self.textDownQLabel = QLabel()
-        self.textQVBoxLayout.addWidget(self.textUpQLabel)
-        self.textQVBoxLayout.addWidget(self.textDownQLabel)
-        self.allQHBoxLayout = QHBoxLayout()
-        self.iconQLabel = QLabel()
-        self.allQHBoxLayout.addWidget(self.iconQLabel, 0)
-        self.allQHBoxLayout.addLayout(self.textQVBoxLayout, 1)
-        self.setLayout(self.allQHBoxLayout)
-        # setStyleSheet
-        self.textUpQLabel.setStyleSheet('''
-            color: rgb(0, 0, 255);
-        ''')
-        self.textDownQLabel.setStyleSheet('''
-            color: rgb(255, 0, 0);
-        ''')
-
-    def setTextUp(self, text):
-        self.textUpQLabel.setText(text)
-
-    def setTextDown(self, text):
-        self.textDownQLabel.setText(text)
-
-    def setIcon(self, imagePath):
-        self.iconQLabel.setPixmap(QPixmap(imagePath).scaled(
-            48, 48))
-
-# Widgetlist Folder
-
-
-class QListQWidget (QWidget):
-    def __init__(self, parent=None):
-        super(QListQWidget, self).__init__(parent)
-        self.textQVBoxLayout = QVBoxLayout()
-        self.textUpQLabel = QLabel()
-        self.textDownQLabel = QLabel()
-        self.textQVBoxLayout.addWidget(self.textUpQLabel)
-
-        self.allQHBoxLayout = QHBoxLayout()
-        self.iconQLabel = QLabel()
-        self.allQHBoxLayout.addWidget(self.iconQLabel, 0)
-        self.allQHBoxLayout.addLayout(self.textQVBoxLayout, 1)
-        self.setLayout(self.allQHBoxLayout)
-        # setStyleSheet
-        self.textUpQLabel.setStyleSheet('''
-            color: rgb(0, 0, 255);
-        ''')
-        self.textDownQLabel.setStyleSheet('''
-            color: rgb(255, 0, 0);
-        ''')
-
-    def setTextUp(self, text):
-        self.textUpQLabel.setText(text)
-
-    def setTextDown(self, text):
-        self.textDownQLabel.setText(text)
-
-    def setIcon(self, imagePath):
-        self.iconQLabel.setPixmap(QPixmap(imagePath).scaled(
-            48, 48))
+        if self.flagPreTraining == False:
+            self.ui.pushButton_11.setText('STOP')
+            # Set Disable Button Back
+            self.ui.pushButton_7.setEnabled(False)
+            self.registerWorking.startCamera.emit()
+        else:
+            self.ui.pushButton_11.setText('START')
+            # Set Disable Button Back
+            self.ui.pushButton_7.setEnabled(True)
+            self.registerWorking.startCamera.emit()
 
 
 if __name__ == "__main__":

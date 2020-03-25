@@ -84,7 +84,10 @@ class RecordVideo(QObject):
                 # Return Boxpoint and Keypoint
                 bounding_boxes, points = align.detect_face.detect_face(
                     frame, minsize, pnet, rnet, onet, threshold, factor)
-                # fps = video_capture.get(cv2.CAP_PROP_FPS)
+
+                # Draw text Frame
+                cv2.putText(frame, "Online", (350, 330), cv2.FONT_HERSHEY_SIMPLEX,
+                            1, (0, 0, 0), thickness=2, lineType=2)
 
                 # print("FPS : {}" .format(fps))
                 curTime = time.time()+1    # calc fps

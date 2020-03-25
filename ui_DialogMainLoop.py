@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
+        MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -59,7 +60,7 @@ class Ui_MainWindow(object):
         font.setUnderline(False)
         font.setWeight(75)
         self.label.setFont(font)
-        self.label.setStyleSheet("background-color: rgb(231, 255, 143);")
+        self.label.setStyleSheet("")
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout_3.addWidget(self.label)
@@ -72,7 +73,7 @@ class Ui_MainWindow(object):
             self.widget.sizePolicy().hasHeightForWidth())
         self.widget.setSizePolicy(sizePolicy)
         self.widget.setMinimumSize(QtCore.QSize(0, 350))
-        self.widget.setStyleSheet("background-color: rgb(255, 255, 127);")
+        self.widget.setStyleSheet("background-color:rgb(0, 0, 0)")
         self.widget.setObjectName("widget")
         self.verticalLayout_3.addWidget(self.widget)
         self.frame_7 = QtWidgets.QFrame(self.frame)
@@ -86,22 +87,22 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_10.addItem(spacerItem)
-        self.pushButton_8 = QtWidgets.QPushButton(self.frame_7)
+        self.pushButton_10 = QtWidgets.QPushButton(self.frame_7)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.pushButton_8.sizePolicy().hasHeightForWidth())
-        self.pushButton_8.setSizePolicy(sizePolicy)
+            self.pushButton_10.sizePolicy().hasHeightForWidth())
+        self.pushButton_10.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Nirmala UI")
         font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_8.setFont(font)
-        self.pushButton_8.setObjectName("pushButton_8")
-        self.horizontalLayout_10.addWidget(self.pushButton_8)
+        self.pushButton_10.setFont(font)
+        self.pushButton_10.setObjectName("pushButton_10")
+        self.horizontalLayout_10.addWidget(self.pushButton_10)
         spacerItem1 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_10.addItem(spacerItem1)
@@ -124,22 +125,16 @@ class Ui_MainWindow(object):
         spacerItem2 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_10.addItem(spacerItem2)
-        self.pushButton_10 = QtWidgets.QPushButton(self.frame_7)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.pushButton_10.sizePolicy().hasHeightForWidth())
-        self.pushButton_10.setSizePolicy(sizePolicy)
+        self.label_4 = QtWidgets.QLabel(self.frame_7)
         font = QtGui.QFont()
         font.setFamily("Nirmala UI")
-        font.setPointSize(13)
+        font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_10.setFont(font)
-        self.pushButton_10.setObjectName("pushButton_10")
-        self.horizontalLayout_10.addWidget(self.pushButton_10)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("background-color:rgb(255, 255, 127)")
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_10.addWidget(self.label_4)
         spacerItem3 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_10.addItem(spacerItem3)
@@ -170,13 +165,21 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label_2 = QtWidgets.QLabel(self.page_2)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_2.sizePolicy().hasHeightForWidth())
+        self.label_2.setSizePolicy(sizePolicy)
+        self.label_2.setMinimumSize(QtCore.QSize(0, 50))
         font = QtGui.QFont()
         font.setFamily("Nirmala UI")
         font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         self.label_2.setFont(font)
-        self.label_2.setStyleSheet("background-color: rgb(255, 255, 127);")
+        self.label_2.setStyleSheet("")
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
@@ -195,6 +198,7 @@ class Ui_MainWindow(object):
             self.widget_2.sizePolicy().hasHeightForWidth())
         self.widget_2.setSizePolicy(sizePolicy)
         self.widget_2.setMinimumSize(QtCore.QSize(460, 350))
+        self.widget_2.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout_4.addWidget(self.widget_2)
         self.listWidget_2 = QtWidgets.QListWidget(self.frame_4)
@@ -273,6 +277,28 @@ class Ui_MainWindow(object):
         spacerItem6 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem6)
+        self.pushButton_11 = QtWidgets.QPushButton(self.frame_5)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.pushButton_11.sizePolicy().hasHeightForWidth())
+        self.pushButton_11.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Nirmala UI")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setUnderline(False)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.pushButton_11.setFont(font)
+        self.pushButton_11.setObjectName("pushButton_11")
+        self.horizontalLayout_9.addWidget(self.pushButton_11)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem7)
         self.pushButton_6 = QtWidgets.QPushButton(self.frame_5)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -289,9 +315,9 @@ class Ui_MainWindow(object):
         self.pushButton_6.setFont(font)
         self.pushButton_6.setObjectName("pushButton_6")
         self.horizontalLayout_9.addWidget(self.pushButton_6)
-        spacerItem7 = QtWidgets.QSpacerItem(
+        spacerItem8 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem7)
+        self.horizontalLayout_9.addItem(spacerItem8)
         self.pushButton_7 = QtWidgets.QPushButton(self.frame_5)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -308,9 +334,9 @@ class Ui_MainWindow(object):
         self.pushButton_7.setFont(font)
         self.pushButton_7.setObjectName("pushButton_7")
         self.horizontalLayout_9.addWidget(self.pushButton_7)
-        spacerItem8 = QtWidgets.QSpacerItem(
+        spacerItem9 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem8)
+        self.horizontalLayout_9.addItem(spacerItem9)
         self.verticalLayout_5.addLayout(self.horizontalLayout_9)
         self.verticalLayout.addWidget(self.frame_5)
         self.stackedWidget.addWidget(self.page_2)
@@ -335,19 +361,19 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.label_3.setFont(font)
-        self.label_3.setStyleSheet("background-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69))")
+        self.label_3.setStyleSheet("")
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_8.addWidget(self.label_3)
         self.verticalLayout_2.addLayout(self.horizontalLayout_8)
-        spacerItem9 = QtWidgets.QSpacerItem(
+        spacerItem10 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem9)
+        self.verticalLayout_2.addItem(spacerItem10)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        spacerItem10 = QtWidgets.QSpacerItem(
+        spacerItem11 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem10)
+        self.horizontalLayout_5.addItem(spacerItem11)
         self.pushButton = QtWidgets.QPushButton(self.page_3)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -365,9 +391,9 @@ class Ui_MainWindow(object):
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_5.addWidget(self.pushButton)
-        spacerItem11 = QtWidgets.QSpacerItem(
+        spacerItem12 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem11)
+        self.horizontalLayout_5.addItem(spacerItem12)
         self.pushButton_2 = QtWidgets.QPushButton(self.page_3)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -385,13 +411,13 @@ class Ui_MainWindow(object):
         self.pushButton_2.setFont(font)
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_5.addWidget(self.pushButton_2)
-        spacerItem12 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem12)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         spacerItem13 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem13)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        spacerItem14 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem13)
+        self.verticalLayout_2.addItem(spacerItem14)
         self.frame_6 = QtWidgets.QFrame(self.page_3)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
@@ -406,11 +432,11 @@ class Ui_MainWindow(object):
         self.frame_6.setObjectName("frame_6")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_6)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        spacerItem15 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem15)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        spacerItem14 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem14)
         self.pushButton_3 = QtWidgets.QPushButton(self.frame_6)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -457,19 +483,20 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelps.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Face Recognition"))
-        self.pushButton_8.setText(_translate("MainWindow", "Stop"))
-        self.pushButton_9.setText(_translate("MainWindow", "Start"))
         self.pushButton_10.setText(_translate("MainWindow", "Back"))
+        self.pushButton_9.setText(_translate("MainWindow", "Start"))
+        self.label_4.setText(_translate("MainWindow", "TextLabel"))
         self.label_2.setText(_translate("MainWindow", "Pre-Training Image"))
         self.pushButton_4.setText(_translate("MainWindow", "Add Person"))
         self.pushButton_5.setText(_translate("MainWindow", "Face Record"))
+        self.pushButton_11.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_6.setText(_translate("MainWindow", "Pre-Training"))
         self.pushButton_7.setText(_translate("MainWindow", "Back"))
         self.label_3.setText(_translate(
